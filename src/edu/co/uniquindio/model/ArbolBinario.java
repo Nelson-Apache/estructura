@@ -1,5 +1,7 @@
 package edu.co.uniquindio.model;
 
+import java.util.Stack;
+
 public class ArbolBinario<E extends  Comparable<E>> {
     private Nodo<E> raiz;
 
@@ -51,24 +53,21 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
     /**
      * elimina un elemento del arbol
-     * 
+     *
      * @param elemento elemento a eliminar/remover
      */
-    public void eliminar(E elemento)
-    {
+    public void eliminar(E elemento) {
         this.raiz = eliminar(elemento, this.raiz);
     }
 
     /**
      * elimina un elemento
-     * 
+     *
      * @param elemento elemento a eliminar
-     * @param nodo nodo para buscar
-     * 
+     * @param nodo     nodo para buscar
      * @return nodo para reemplazar el eliminado
      */
-    private Nodo<E> eliminar(E elemento, Nodo<E> nodo)
-    {
+    private Nodo<E> eliminar(E elemento, Nodo<E> nodo) {
         if (nodo == null || elemento == null) return null;
 
         int comparacion = elemento.compareTo(nodo.dato);
@@ -99,16 +98,14 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
     /**
      * obtiene la altura del arbol
-     * 
+     *
      * @return numero maximo de niveles
      */
-    public int obtenerAltura()
-    {
+    public int obtenerAltura() {
         return obtenerAltura(this.raiz);
     }
 
-    private int obtenerAltura(Nodo<E> nodo)
-    {
+    private int obtenerAltura(Nodo<E> nodo) {
         if (nodo == null) return 0;
 
         int alturaIzquierda = obtenerAltura(nodo.izquierda);
@@ -119,18 +116,15 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
     /**
      * obtiene el nivel de un elemento en el arbol
-     * 
+     *
      * @param elemento elemento a buscar
-     * 
      * @return el nivel en el que esta el elemento o {@code -1} si no esta en la estructura
      */
-    public int obtenerNivel(E elemento)
-    {
+    public int obtenerNivel(E elemento) {
         return obtenerNivel(elemento, this.raiz);
     }
 
-    private int obtenerNivel(E elemento, Nodo<E> nodo)
-    {
+    private int obtenerNivel(E elemento, Nodo<E> nodo) {
         if (elemento == null || nodo == null) return -1;
 
         int comparacion = elemento.compareTo(nodo.dato);
@@ -138,24 +132,22 @@ public class ArbolBinario<E extends  Comparable<E>> {
         if (comparacion == 0) return 0;
 
         int nivel = comparacion < 0
-            ? obtenerNivel(elemento, nodo.izquierda)
-            : obtenerNivel(elemento, nodo.derecha);
+                ? obtenerNivel(elemento, nodo.izquierda)
+                : obtenerNivel(elemento, nodo.derecha);
 
         return nivel == -1 ? -1 : 1 + nivel;
     }
 
     /**
      * cuenta el numero de hojas en el arbol
-     * 
+     *
      * @return numero de hojas
      */
-    public int contarHojas()
-    {
+    public int contarHojas() {
         return contarHojas(this.raiz);
     }
 
-    private int contarHojas(Nodo<E> nodo)
-    {
+    private int contarHojas(Nodo<E> nodo) {
         if (nodo == null) return 0;
 
         if (nodo.izquierda == null && nodo.derecha == null) {
@@ -167,16 +159,14 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
     /**
      * obtiene el valor minimo de forma recursiva
-     * 
+     *
      * @return valor minimo del arbol
      */
-    public E obtenerMinimoRec()
-    {
+    public E obtenerMinimoRec() {
         return obtenerMinimoRec(this.raiz);
     }
 
-    private E obtenerMinimoRec(Nodo<E> nodo)
-    {
+    private E obtenerMinimoRec(Nodo<E> nodo) {
         if (nodo == null) return null;
 
         if (nodo.izquierda == null) return nodo.dato;
@@ -186,11 +176,10 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
     /**
      * obtiene el valor minimo fe forma iterativa
-     * 
+     *
      * @return valor minimo del arbol
      */
-    public E obtenerMinimoIt()
-    {
+    public E obtenerMinimoIt() {
         Nodo<E> aux = this.raiz;
 
         while (aux != null && aux.izquierda != null) {
@@ -221,18 +210,15 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
     /**
      * comprueba si un arbol tiene los mismos elementos y posiciones que el actual
-     * 
+     *
      * @param arbol el otro arbol binario
-     * 
      * @return son identicos
      */
-    public boolean esIdentico(ArbolBinario<E> arbol)
-    {
+    public boolean esIdentico(ArbolBinario<E> arbol) {
         return esIdentico(this.raiz, arbol.raiz);
     }
 
-    private boolean esIdentico(Nodo<E> nodo1, Nodo<E> nodo2)
-    {
+    private boolean esIdentico(Nodo<E> nodo1, Nodo<E> nodo2) {
         // si ambos son nulos son iguales al no tener hijos ni valor
         if (nodo1 == null && nodo2 == null) return true;
 
@@ -243,14 +229,14 @@ public class ArbolBinario<E extends  Comparable<E>> {
         // dado que ninguno de los nodos es nulo
         // si el valor de los nodos es comparativamente diferente
         // no son identicos
-        if (nodo1.dato.compareTo(nodo2.dato) != 0)  {
+        if (nodo1.dato.compareTo(nodo2.dato) != 0) {
             return false;
         }
 
         // ya que los nodos son identicos delegaremos la opcion
         // de decidir a sus hijos izquierdos y derechos
         return esIdentico(nodo1.izquierda, nodo2.izquierda)
-            && esIdentico(nodo1.derecha, nodo2.derecha);
+                && esIdentico(nodo1.derecha, nodo2.derecha);
     }
 
 
@@ -288,11 +274,10 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
     /**
      * comprueba la altura del arbol de forma iteratiba
-     * 
+     *
      * @return la altura del arbol
      */
-    public int obtenerAlturaIt()
-    {
+    public int obtenerAlturaIt() {
         if (this.raiz == null) return 0;
 
         int alturaMaxima = 0;
@@ -319,6 +304,33 @@ public class ArbolBinario<E extends  Comparable<E>> {
                 numNodos--;
             }
         }
+    }
+
+    //PUNTO 10 - Realizado por Valeria
+    public Nodo<E> ArbolBinarioExp(String expresion) {
+        Stack<Nodo> pila = new Stack<Nodo>();
+        for (char c : expresion.toCharArray()) {
+            Nodo nodo = new Nodo(c);
+            if (c == '+' || c == '-' || c == '/' || c == '*') {
+                nodo.derecha = pila.pop();
+                nodo.izquierda = pila.pop();
+
+            }
+            pila.push(nodo);
+        }
+        return pila.pop();
+    }
+    public static void imprimirInorden(Nodo<Character> nodo) {
+        if (nodo == null) return;
+
+        // Lado izquierdo
+        imprimirInorden(nodo.izquierda);
+
+        // Nodo raíz (operador u operando)
+        System.out.print(nodo.dato);
+
+        // Lado derecho
+        imprimirInorden(nodo.derecha);
     }
 }
 
