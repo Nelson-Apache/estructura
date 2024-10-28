@@ -1,5 +1,7 @@
+package edu.co.uniquindio.model;
+
 public class ArbolBinario<E extends  Comparable<E>> {
-    private Nodo raiz;
+    private Nodo<E> raiz;
 
     public ArbolBinario() {
         this.raiz = null;
@@ -7,22 +9,22 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
     public void agregar(E dato) {
         if (this.raiz == null) {
-            this.raiz = new Nodo(dato);
+            this.raiz = new Nodo<>(dato);
         } else {
             agregar(dato, raiz);
         }
     }
 
-    private void agregar(E dato, Nodo nodo) {
+    private void agregar(E dato, Nodo<E> nodo) {
         if (nodo.dato.compareTo(dato) > 0) {
             if (nodo.izquierda == null) {
-                nodo.izquierda = new Nodo(dato);
+                nodo.izquierda = new Nodo<>(dato);
             } else {
                 agregar(dato, nodo.izquierda);
             }
         } else if (nodo.dato.compareTo(dato) < 0) {
             if (nodo.derecha == null) {
-                nodo.derecha = new Nodo(dato);
+                nodo.derecha = new Nodo<>(dato);
             } else {
                 agregar(dato, nodo.derecha);
             }
@@ -33,7 +35,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
         return contiene(dato, raiz);
     }
 
-    private boolean contiene(E dato, Nodo nodo) {
+    private boolean contiene(E dato, Nodo<E> nodo) {
         if (nodo == null) return false;
 
         int comparacion = nodo.dato.compareTo(dato);
@@ -65,7 +67,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
      * 
      * @return nodo para reemplazar el eliminado
      */
-    private Nodo eliminar(E elemento, Nodo nodo)
+    private Nodo<E> eliminar(E elemento, Nodo<E> nodo)
     {
         if (nodo == null || elemento == null) return null;
 
@@ -77,7 +79,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
             } else if (nodo.derecha == null) {
                 return nodo.izquierda;
             } else {
-                Nodo aux = nodo.izquierda;
+                Nodo<E> aux = nodo.izquierda;
 
                 while (aux.derecha != null) aux = aux.derecha;
 
@@ -105,7 +107,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
         return obtenerAltura(this.raiz);
     }
 
-    private int obtenerAltura(Nodo nodo)
+    private int obtenerAltura(Nodo<E> nodo)
     {
         if (nodo == null) return 0;
 
@@ -127,7 +129,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
         return obtenerNivel(elemento, this.raiz);
     }
 
-    private int obtenerNivel(E elemento, Nodo nodo)
+    private int obtenerNivel(E elemento, Nodo<E> nodo)
     {
         if (elemento == null || nodo == null) return -1;
 
@@ -152,7 +154,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
         return contarHojas(this.raiz);
     }
 
-    private int contarHojas(Nodo nodo)
+    private int contarHojas(Nodo<E> nodo)
     {
         if (nodo == null) return 0;
 
@@ -173,7 +175,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
         return obtenerMinimoRec(this.raiz);
     }
 
-    private E obtenerMinimoRec(Nodo nodo)
+    private E obtenerMinimoRec(Nodo<E> nodo)
     {
         if (nodo == null) return null;
 
@@ -189,7 +191,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
      */
     public E obtenerMinimoIt()
     {
-        Nodo aux = this.raiz;
+        Nodo<E> aux = this.raiz;
 
         while (aux != null && aux.izquierda != null) {
             aux = aux.izquierda;
@@ -201,18 +203,20 @@ public class ArbolBinario<E extends  Comparable<E>> {
     /**
      * imprime el arbol de forma horizontal
      */
-    public void imprimirHorizontal()
-    {
-        imprimirHorizontal(this.raiz, 0);
+    // Método que genera la representación en un String
+    public String imprimirHorizontal() {
+        StringBuilder sb = new StringBuilder();
+        imprimirHorizontal(this.raiz, 0, sb);
+        return sb.toString();
     }
 
-    private void imprimirHorizontal(Nodo nodo, int nivel)
-    {
+    // Método auxiliar para construir el String
+    private void imprimirHorizontal(Nodo<E> nodo, int nivel, StringBuilder sb) {
         if (nodo == null) return;
 
-        imprimirHorizontal(nodo.derecha, nivel + 1);
-        System.out.println(" ".repeat(nivel * 4) + nodo.dato);
-        imprimirHorizontal(nodo.izquierda, nivel + 1);
+        imprimirHorizontal(nodo.derecha, nivel + 1, sb);
+        sb.append(" ".repeat(nivel * 4)).append(nodo.dato).append("\n");
+        imprimirHorizontal(nodo.izquierda, nivel + 1, sb);
     }
 
     /**
@@ -227,7 +231,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
         return esIdentico(this.raiz, arbol.raiz);
     }
 
-    private boolean esIdentico(Nodo nodo1, Nodo nodo2)
+    private boolean esIdentico(Nodo<E> nodo1, Nodo<E> nodo2)
     {
         // si ambos son nulos son iguales al no tener hijos ni valor
         if (nodo1 == null && nodo2 == null) return true;
@@ -253,33 +257,33 @@ public class ArbolBinario<E extends  Comparable<E>> {
     /**
      * imprime el arbol por niveles
      */
-    @SuppressWarnings("unchecked")
-    public void imprimirAmplitud()
-    {
-        imprimirAmplitud(Cola.de(this.raiz));
+
+    public String imprimirAmplitud() {
+        StringBuilder sb = new StringBuilder();
+        imprimirAmplitud(Cola.de(this.raiz), sb);
+        return sb.toString();
     }
 
-    private void imprimirAmplitud(Cola<Nodo> cola)
-    {
+    private void imprimirAmplitud(Cola<Nodo<E>> cola, StringBuilder sb) {
         if (cola.estaVacia()) return;
 
         int enNivel = cola.longitud();
 
         for (int i = enNivel; i > 0; i--) {
-            Nodo nodo = cola.desencolar();
+            Nodo<E> nodo = cola.desencolar();
 
             if (nodo != null) {
-                System.out.print(nodo.dato + "  ");
+                sb.append(nodo.dato).append("  ");
 
                 if (nodo.izquierda != null) cola.encolar(nodo.izquierda);
                 if (nodo.derecha != null) cola.encolar(nodo.derecha);
             }
         }
 
-        // salto de linea de nivel
-        System.out.println();
+        // Agregar salto de línea para separar niveles
+        sb.append("\n");
 
-        imprimirAmplitud(cola);
+        imprimirAmplitud(cola, sb);
     }
 
     /**
@@ -292,7 +296,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
         if (this.raiz == null) return 0;
 
         int alturaMaxima = 0;
-        Cola<Nodo> cola = new Cola<>();
+        Cola<Nodo<E>> cola = new Cola<>();
         cola.encolar(this.raiz);
 
         while (true) {
@@ -305,7 +309,7 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
             // recorremos los nodos de ese nivel y agregamos sus hijos
             while (numNodos > 0) {
-                Nodo aux = cola.desencolar();
+                Nodo<E> aux = cola.desencolar();
 
                 // estos hijos son del siguiente nivel
                 if (aux.izquierda != null) cola.encolar(aux.izquierda);
@@ -314,22 +318,6 @@ public class ArbolBinario<E extends  Comparable<E>> {
                 // disminuimos el numero de nodos del nivel actual
                 numNodos--;
             }
-        }
-    }   
-
-    private class Nodo {
-        public Nodo izquierda;
-        public Nodo derecha;
-        public E dato;
-
-        public Nodo(Nodo izq, E dato, Nodo der) {
-            this.izquierda = izq;
-            this.derecha = der;
-            this.dato = dato;
-        }
-
-        public Nodo(E dato) {
-            this(null, dato, null);
         }
     }
 }

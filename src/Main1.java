@@ -1,7 +1,8 @@
- public class Main
+import edu.co.uniquindio.model.ArbolBinario;
+
+public class Main1
  {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         ArbolBinario<Integer> abb = new ArbolBinario<>();
 
         abb.agregar(8);
