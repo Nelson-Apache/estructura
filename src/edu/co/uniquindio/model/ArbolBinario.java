@@ -306,11 +306,11 @@ public class ArbolBinario<E extends  Comparable<E>> {
         }
     }
 
-    //PUNTO 10 - Realizado por Valeria
+    //PUNTO 10
     public Nodo<E> ArbolBinarioExp(String expresion) {
-        Stack<Nodo> pila = new Stack<Nodo>();
+        Stack<Nodo<E>> pila = new Stack<>();
         for (char c : expresion.toCharArray()) {
-            Nodo nodo = new Nodo(c);
+            Nodo<E> nodo = new Nodo(c);
             if (c == '+' || c == '-' || c == '/' || c == '*') {
                 nodo.derecha = pila.pop();
                 nodo.izquierda = pila.pop();
@@ -331,6 +331,14 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
         // Lado derecho
         imprimirInorden(nodo.derecha);
+    }
+
+    public Nodo<E> getRaiz() {
+        return raiz;
+    }
+
+    public void setRaiz(Nodo<E> raiz) {
+        this.raiz = raiz;
     }
 }
 

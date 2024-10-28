@@ -14,4 +14,16 @@ public class Nodo<E extends Comparable<E>> {
     public Nodo(E dato) {
         this(null, dato, null);
     }
+
+    public E getDato() {
+        return dato;
+    }
+
+    public Nodo<E> getDerecha() {
+        return derecha;
+    }
+
+    public Nodo<E> getIzquierda() {
+        return izquierda;
+    }
 }
