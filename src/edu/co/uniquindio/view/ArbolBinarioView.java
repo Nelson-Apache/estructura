@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
 
-public class ArbolBinarioView extends JFrame {
+public class ArbolBinarioView<T> extends JFrame {
 
     private ArbolBinario<Integer> arbol;
     private ArbolBinario<Integer> arbol2;
@@ -68,7 +68,7 @@ public class ArbolBinarioView extends JFrame {
         btnIdentico.addActionListener(e -> iniciarComparacionArboles());
         btnRecorridoAmplitud.addActionListener(e -> mostrarRecorridoAmplitud());
         btnAlturaIterativa.addActionListener(e -> mostrarAlturaIterativa());
-        //btnArbolExpresion.addActionListener(e -> crearArbolExpresion());
+        btnArbolExpresion.addActionListener(e -> crearArbolExpresion());
 
         // Panel para el árbol gráfico
         arbolPanel = new ArbolPanel();
@@ -201,7 +201,7 @@ public class ArbolBinarioView extends JFrame {
             }
         }
 
-        private void drawTree(Graphics g, Nodo<Integer> node, int x, int y, int offset) {
+        private void drawTree(Graphics g, Nodo<?> node, int x, int y, int offset) {
             if (node == null) {
                 return;
             }
@@ -220,6 +220,18 @@ public class ArbolBinarioView extends JFrame {
         }
     }
 
+    private void crearArbolExpresion() {
+        String expresion = JOptionPane.showInputDialog(this, "Ingrese la expresión infija (sin espacios):");
+        if (expresion != null && !expresion.isEmpty()) {
+            try {
+                arbol.setRaiz(arbol.ArbolBinarioExp(expresion));
+                outputArea.setText("Expresión: " + expresion + "\n");
+                arbolPanel.repaint();  // Redibuja el árbol gráfico
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al crear el árbol de expresión. Asegúrese de que la expresión sea válida.");
+            }
+        }
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new ArbolBinarioView());

@@ -308,18 +308,81 @@ public class ArbolBinario<E extends  Comparable<E>> {
 
     //PUNTO 10
     public Nodo<E> ArbolBinarioExp(String expresion) {
-        Stack<Nodo<E>> pila = new Stack<>();
-        for (char c : expresion.toCharArray()) {
-            Nodo<E> nodo = new Nodo(c);
-            if (c == '+' || c == '-' || c == '/' || c == '*') {
-                nodo.derecha = pila.pop();
-                nodo.izquierda = pila.pop();
+        Stack<Nodo<E>> nodos = new Stack<>();
+        Stack<Character> operadores = new Stack<>();
 
+        // Separar la expresión en tokens
+        String[] tokens = expresion.split("(?<=[()*/+-])|(?=[()*/+-])"); // Usar regex para separar operadores y paréntesis
+
+        for (String token : tokens) {
+            token = token.trim(); // Limpiar espacios en blanco
+
+            if (token.isEmpty()) continue; // Ignorar tokens vacíos
+
+            // Si es un paréntesis de apertura, lo empujamos a la pila de operadores
+            if (token.equals("(")) {
+                operadores.push('(');
             }
-            pila.push(nodo);
+            // Si es un paréntesis de cierre, procesamos hasta encontrar el de apertura
+            else if (token.equals(")")) {
+                while (!operadores.isEmpty() && operadores.peek() != '(') {
+                    char operador = operadores.pop();
+                    Nodo<E> derecha = nodos.pop();
+                    Nodo<E> izquierda = nodos.pop();
+                    Nodo<E> nodo = new Nodo(operador);
+                    nodo.derecha = derecha;
+                    nodo.izquierda = izquierda;
+                    nodos.push(nodo);
+                }
+                operadores.pop(); // quitar el '(' de la pila
+            }
+            // Si es un operador, procesamos según su prioridad
+            else if (token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/")) {
+                while (!operadores.isEmpty() && prioridad(token.charAt(0)) <= prioridad(operadores.peek())) {
+                    char operador = operadores.pop();
+                    Nodo<E> derecha = nodos.pop();
+                    Nodo<E> izquierda = nodos.pop();
+                    Nodo<E> nodo = new Nodo(operador);
+                    nodo.derecha = derecha;
+                    nodo.izquierda = izquierda;
+                    nodos.push(nodo);
+                }
+                operadores.push(token.charAt(0));
+            }
+            // Si es un operando, simplemente lo añadimos a la pila de nodos
+            else {
+                nodos.push(new Nodo(token.charAt(0)));
+            }
         }
-        return pila.pop();
+
+        // Procesar cualquier operador que quede en la pila
+        while (!operadores.isEmpty()) {
+            char operador = operadores.pop();
+            Nodo<E> derecha = nodos.pop();
+            Nodo<E> izquierda = nodos.pop();
+            Nodo<E> nodo = new Nodo(operador);
+            nodo.derecha = derecha;
+            nodo.izquierda = izquierda;
+            nodos.push(nodo);
+        }
+
+        return nodos.pop(); // La raíz del árbol
     }
+
+    // Método para determinar la prioridad de los operadores
+    private int prioridad(char operador) {
+        switch (operador) {
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            default:
+                return 0;
+        }
+    }
+
     public static void imprimirInorden(Nodo<Character> nodo) {
         if (nodo == null) return;
 
